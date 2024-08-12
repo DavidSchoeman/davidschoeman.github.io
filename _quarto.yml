@@ -17,29 +17,23 @@ website:
     left:
       - text: "Projects"
         href: projects/index.qmd
-      - text: "ARC Projects"
-        href: projects/index.qmd
       - text: "Blog"
         href: posts.qmd
-      - text: "Photography"
-        href: photography/index.qmd
       - text: "CV"
         href: cv/index.qmd
       - text: "Publications"
-        href: https://scholar.google.com.au
+        href: https://scholar.google.com/citations?user=AgD8LIMAAAAJ&hl=en&oi=ao
         target: _blank
     
     # your social media handles
     right:
-      - icon: twitter
-        href: https://twitter.com/XXXX
       - icon: linkedin
-        href: https://www.linkedin.com/XXXX
+        href: https://www.linkedin.com/in/david-schoeman-6249262ab
       - icon: envelope
         aria-label: email
         href: "mailto:dschoema@usc.edu.au"  
       - icon: github
-        href: https://github.com/MathMarEcol
+        href: https://github.com/DavidSchoeman
   
   
 
@@ -58,7 +52,6 @@ project:
   output-dir: docs
 
   preview: 
-    port: 22222
     browser: true
     watch-inputs: true
     navigate: true
@@ -70,7 +63,7 @@ format:
   html:
     fontsize: 1.1em
     theme: 
-      - Yeti # 
+      - jolla # 
       # - html/styles.scss
     toc: false
     code-link: true

@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Welcome to my website!",
+    "title": "Hello world",
     "section": "",
-    "text": "Twitter\n  \n  \n    \n     Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nWelcome to my website!\nI am Gandalf the White, a renowned wizard and scholar of Middle-earth. Over the centuries, I have dedicated my life to studying the history, languages, and cultures of the peoples of Middle-earth. On this website, I offer a glimpse into my vast body of knowledge, ongoing research, and publications.\nMy research interests span the entirety of Middle-earth, from the distant past to the present day. I am particularly passionate about the languages and mythologies of the Elves, Dwarves, and Men, and I have made significant contributions to the understanding of these subjects. My studies of the natural world have also been extensive, and I am an expert in the flora and fauna of Middle-earth. Additionally, I have been involved in many important historical events and offer valuable first-hand accounts and insights on the past.\nNot only am I a scholar, but I am also a mentor and teacher. Over the centuries, I have had the honor of working with many young wizards, passing on my knowledge and experience to the next generation. I have a particular interest in the education of hobbits, whom I see as having great potential despite their small size and simple lifestyle. My teaching style is engaging and accessible, and I encourage my students to think critically and creatively.\nOn this website, you will find a selection of my published works, including scholarly articles, monographs, and translations. You will also find news and updates on my current research projects, as well as information on upcoming events and conferences where I will be speaking. I invite you to explore my website and learn more about my life’s work as one of Middle-earth’s greatest scholars and thinkers."
+    "text": "Github\n  \n  \n    \n     LinkedIn\n  \n  \n    \n     Email\n  \n\n\n\n\nHello world\nI am a quantitative ecologist who specialises in marine climate-change ecology and climate-smart marine conservation planning. Having worked professionally as a marine ecologist in South Africa, the United Kingdom and Australia, I have diverse interests that revolve around ecological responses to anthropogenic impacts in coastal and oceanic waters.\nThroughout my career, I have worked in large, collaborative groups to facilitate or lead high-impact science in the field of climate-change ecology. In so doing, I have made fundamental contributions to the advancement of:\n\nthe detection and attribution of observed impacts of climate change on marine organisms and ecosystems,\nthe projection of future climate-change risks, and\nthe development of climate-smart systematic conservation planning approaches to mitigate these impacts and risks.\n\nMy expertise in ecological analysis and synthesis culminated in my appointment to several roles in the Fifth and Sixth Assessment Cycle of the Intergovernmental Panel on Climate Change (IPCC). These include serving as a Coordinating Lead Author for the ocean and coastal chapter of the IPCC Sixth Assessment Report (IPCC AR6 Working Group II — 2019–2022), as a Review Editor on the IPCC Special Report on Oceans and Cryosphere in a Changing Climate (SROCC — 2018–2019), as a delegate at Scoping Meetings for the IPCC AR6 (2017) and its Synthesis Report (2019), and as a Contributing Author to several other Chapters and Cross-Chapter Boxes within this cycle. As a result of my contributions, I was selected as a member of the Core Writing and Negotiation Team for the Approval Session of the Summary for Policymakers of the WGII Contribution to the IPCC AR6 (2020–2022).\nOther career highlights include the opportunity to work with a wide range of outstanding HDR students. Although these collaborations have been hugely stimulating, have generated amazing ideas, and have resulted in excellent publications, one less-traditional outcome stands out. Having worked with a PhD candidate at the University of Auckland to publish a high-impact paper (Chaudhary et al. 2021 PNAS), I was approached by award-winning Guardian Australia cartoonist First Dog on the Moon (Andrew Marlton) to develop cartoon based on its results. After several rounds of brainstorming, I was awarded a byline on the work when it was published (https://www.theguardian.com/commentisfree/2021/apr/09/a-new-report-suggests-sea-creatures-are-fleeing-the-equator).\nA final career highlight relates to the intersection between teaching and research. On being appointed as a full-time academic at UniSC in 2013, I was afforded the opportunity to lead the design, accreditation, and delivery of Australia’s first Bachelor of Animal Ecology Degree Program. Completion of this task not only initiated one of the most successful and popular degree programs in the School of Science, Technology and Engineering, but also secured the recruitment of eight new members of staff. This significantly boosted both teaching and research capacity at the University of the Sunshine Coast and has underpinned the university’s identified research strengths in marine and coastal ecology and in climate-change research. In recognition of my achievements in academic leadership and delivery, I was awarded the Vice-Chancellor and President’s Award for Excellence in Learning and Teaching (2017).\nWhile my research interests remain broad, I continue to work mainly on various aspects of marine climate-change ecology, with a growing focus on potential solutions. Areas of particular interest in this regard include forecasting and projecting future catches for fisheries and further advancing the field of climate-smart systematic conservation planning.\nIn terms of outreach, one of my favourite activities has been my collaboration with Professor Anthony Richardson (UQ/CSIRO) to deliver a series of annual workshops at the University of Queensland, at which we train HDRs, ECRs and researchers from various universities and State and Federal agencies in the use of the statistical programming environment, R. Having now run for more than a decade, and included involvement by Associate Professor Chris Brown (University of Tasmania), and Drs Christina Buelow (Griffith University) and Jason Everett (UQ), we have trained more 1,000 scientists in the practice of applied statistics. In so doing, we have built capacity and collaborations that will yield ongoing benefits across the region and nation."
   },
   {
     "objectID": "cv/index.html",
@@ -23,16 +23,16 @@
   {
     "objectID": "posts/2024-04-19-app-pros-con/index.html",
     "href": "posts/2024-04-19-app-pros-con/index.html",
-    "title": "Web apps in R - To package or not to package?",
+    "title": "Under development",
     "section": "",
-    "text": "Quarto ‘quick and dirty’ or {Golem} for longevity and complexity?\nAs expected in an open-source programming language, the app-making landscape in R seems to be in constant flux. Something newish that I’ve been finding useful lately is using Quarto’s ‘Dashboards with Shiny for R’ feature.\nQuarto is very similar to Rmarkdown, but has a few additional features. One of them is the ability to embed R {shiny} apps. So you end up writing your app like you would a markdown doc - the context, ui, and server are all code chunks, and the text around those code chunks set’s up the UI. For example, normally in markdown we use # to delineate and navigate headers; in Quarto Shiny Dashboards, # are used to delineate pages, tab panels, etc.\nI’ve found it’s great for proto-typing simple apps - you can get something up and running very quickly in Quarto’s ‘Dashboards with Shiny for R’. However, I think it could get unwieldy when you start building complex apps with modules etc. In that case, developing your {shiny} app as an R package with {golem} might be a better option. {golem} provides a great framework for engineering production grade shiny apps that are complex and can be easily maintained in the long-term.\nI ended up turning the prototype app I built in Quarto’s ‘Dashboards with Shiny for R’ into an R package with {golem}. It took much longer than I expected, but much of that time was learning about R package development (which I had never done before) and {golem}.\nIn the end I think it was worth the extra time and effort streamline as an R package. But if you want to compare for yourself, find the protoype Quarto dashboard shiny here and the {golem} R package version here.\nCurious to hear others’ experiences though - please get in touch."
+    "text": "Nothing to see here, yet\nOne day, I’ll get to this…."
   },
   {
     "objectID": "projects/index.html",
     "href": "projects/index.html",
     "title": "Projects",
     "section": "",
-    "text": "arXiv Preprint | Code\nOver the centuries, I have devoted countless hours to deciphering and translating the ancient scripts and dialects of the various peoples of Middle-earth. My goal is to gain a deeper understanding of the cultures and histories of these peoples by studying their languages. Currently, I am working on a monograph that explores the linguistic roots of the Elvish languages. Through extensive research and analysis, I hope to shed light on the connections between the different dialects of Elvish and their origins. This project has been particularly challenging, as Elvish is a complex and nuanced language, but I am determined to see it through to completion."
+    "text": "arXiv Preprint | Code\nBuffering…"
   },
   {
     "objectID": "projects/index.html#the-languages-of-middle-earth",
@@ -53,6 +53,20 @@
     "href": "posts.html",
     "title": "My Blog",
     "section": "",
-    "text": "Web apps in R - To package or not to package?\n\n\n\nquarto\n\n\nR\n\n\nweb app\n\n\ngolem\n\n\n\nDifferent approaches to developing web apps in R\n\n\n\nChristina Buelow\n\n\nApr 19, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Under development\n\n\n\n404\n\n\n\nWill get there sometimg\n\n\n\nDavid Schoeman\n\n\nAug 12, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/index.html#under-development",
+    "href": "projects/index.html#under-development",
+    "title": "Projects",
+    "section": "",
+    "text": "arXiv Preprint | Code\nBuffering…"
+  },
+  {
+    "objectID": "projects/index.html#section",
+    "href": "projects/index.html#section",
+    "title": "Projects",
+    "section": "…",
+    "text": "…"
   }
 ]

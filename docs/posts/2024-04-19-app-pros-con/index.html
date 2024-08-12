@@ -6,11 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Christina Buelow">
-<meta name="dcterms.date" content="2024-04-19">
-<meta name="description" content="Different approaches to developing web apps in R">
+<meta name="author" content="David Schoeman">
+<meta name="dcterms.date" content="2024-08-12">
+<meta name="description" content="Will get there sometimg">
 
-<title>Web apps in R - To package or not to package? – Gandalf</title>
+<title>Under development – David Schoeman</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
     <img src="../../img/logo.png" alt="" class="navbar-logo">
     </a>
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Gandalf</span>
+    <span class="navbar-title">David Schoeman</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -101,36 +101,27 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../photography/index.html"> 
-<span class="menu-text">Photography</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../../cv/index.html"> 
 <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://scholar.google.com.au" target="_blank"> 
+    <a class="nav-link" href="https://scholar.google.com/citations?user=AgD8LIMAAAAJ&amp;hl=en&amp;oi=ao" target="_blank"> 
 <span class="menu-text">Publications</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/XXXX"> <i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://www.linkedin.com/in/david-schoeman-6249262ab"> <i class="bi bi-linkedin" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://www.linkedin.com/XXXX"> <i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="mailto:dschoema@usc.edu.au"> <i class="bi bi-envelope" role="img" aria-label="email">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="mailto:XXXX@XXX.com"> <i class="bi bi-envelope" role="img" aria-label="email">
-</i> 
-<span class="menu-text"></span></a>
-  </li>  
-  <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/MathMarEcol"> <i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/DavidSchoeman"> <i class="bi bi-github" role="img">
 </i> 
 <span class="menu-text"></span></a>
   </li>  
@@ -145,17 +136,14 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Web apps in R - To package or not to package?</h1>
+      <h1 class="title">Under development</h1>
                   <div>
         <div class="description">
-          Different approaches to developing web apps in R
+          Will get there sometimg
         </div>
       </div>
                           <div class="quarto-categories">
-                <div class="quarto-category">quarto</div>
-                <div class="quarto-category">R</div>
-                <div class="quarto-category">web app</div>
-                <div class="quarto-category">golem</div>
+                <div class="quarto-category">404</div>
               </div>
                   </div>
   </div>
@@ -166,14 +154,14 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Christina Buelow </p>
+               <p>David Schoeman </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 19, 2024</p>
+        <p class="date">August 12, 2024</p>
       </div>
     </div>
     
@@ -192,14 +180,9 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="quarto-quick-and-dirty-or-golem-for-longevity-and-complexity" class="level3">
-<h3 class="anchored" data-anchor-id="quarto-quick-and-dirty-or-golem-for-longevity-and-complexity">Quarto ‘quick and dirty’ or {Golem} for longevity and complexity?</h3>
-<p>As expected in an open-source programming language, the app-making landscape in <strong>R</strong> seems to be in constant flux. Something <em>newish</em> that I’ve been finding useful lately is using <a href="https://quarto.org/docs/dashboards/interactivity/shiny-r.html">Quarto’s ‘Dashboards with Shiny for R’</a> feature.</p>
-<p><strong>Quarto</strong> is very similar to Rmarkdown, but has a few additional features. One of them is the ability to embed R {shiny} apps. So you end up writing your app like you would a markdown doc - the context, ui, and server are all code chunks, and the text around those code chunks set’s up the UI. For example, normally in markdown we use <code>#</code> to delineate and navigate headers; in Quarto Shiny Dashboards, <code>#</code> are used to delineate pages, tab panels, etc.</p>
-<p>I’ve found it’s great for proto-typing simple apps - you can get something up and running very quickly in <strong>Quarto’s ‘Dashboards with Shiny for R’</strong>. However, I think it could get unwieldy when you start building complex apps with modules etc. In that case, developing your {shiny} app as an R package with <a href="https://github.com/ThinkR-open/golem?tab=readme-ov-file#golem-">{golem}</a> might be a better option. {golem} provides a great framework for <a href="https://engineering-shiny.org/">engineering production grade shiny apps</a> that are complex and can be easily maintained in the long-term.</p>
-<p>I ended up turning the prototype app I built in <strong>Quarto’s ‘Dashboards with Shiny for R’</strong> into an R package with {golem}. It took much longer than I expected, but much of that time was learning about R package development (which I had never done before) and {golem}.</p>
-<p>In the end I think it was worth the extra time and effort streamline as an R package. But if you want to compare for yourself, find the <a href="https://github.com/cabuelow/oceans-dashboard?tab=readme-ov-file#oceans-mel-dashboard">protoype Quarto dashboard shiny here</a> and the {golem} <a href="https://github.com/cabuelow/OceansDash?tab=readme-ov-file#oceans-monitoring-evaluation--learning-dashboard">R package version here</a>.</p>
-<p>Curious to hear others’ experiences though - please get in touch.</p>
+<section id="nothing-to-see-here-yet" class="level3">
+<h3 class="anchored" data-anchor-id="nothing-to-see-here-yet">Nothing to see here, yet</h3>
+<p>One day, I’ll get to this….</p>
 
 
 </section>
