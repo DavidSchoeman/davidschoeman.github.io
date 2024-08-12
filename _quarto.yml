@@ -6,12 +6,12 @@ website:
   description: "Marine Climate-Change Ecologist"   # A brief slogan (optional)
   image: img/my_image.jpg
   
-  favicon: img/floppy.svg
+  favicon: img/floppy_white.png
   
   # start of the navigation bar at the top of the website
   navbar:
     pinned: true
-    logo: /img/floppy.svg
+    logo: /img/floppy_white.png
     
     # your sub-pages
     left:
