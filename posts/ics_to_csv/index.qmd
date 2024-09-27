@@ -5,7 +5,7 @@ author:
   - name: David Schoeman
 date: 2024-09-27
 categories: [R programming] # self-defined categories
-image: 404.png
+image: cal.png
 draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
 ---
 
