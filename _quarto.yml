@@ -43,7 +43,7 @@ website:
     type: textbox
   page-footer: 
     left: |
-      <span class="faux-block">&#169; 2024 Gandalf the White CC BY-SA 4.0</span>
+      <span class="faux-block">&#169; 2024 Boz's code CC BY-SA 4.0</span>
     right: |
       <span class="faux-block"><a href="https://github.com/<github username>/<github username>.github.io">View source on GitHub</a></span>
 
