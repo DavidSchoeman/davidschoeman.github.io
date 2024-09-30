@@ -1,6 +1,6 @@
 ---
 title: "Converting a calendar export from .ics to .csv"
-description: "My very first blog. Ever"
+description: "My very first blog. Ever."
 author:
   - name: David Schoeman
 date: 2024-09-27
