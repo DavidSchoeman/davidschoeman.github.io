@@ -1,0 +1,138 @@
+---
+title: "Explorations in functional programming in R"
+description: "Writing a complex function with unlimited arguments and masked variables."
+author:
+  - name: David Schoeman
+date: 2024-10-10
+categories: [R programming] # self-defined categories
+image: mask.png
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+---
+
+## The background
+
+When students show the initiative to use `R` beyond just ANM203, I sometimes try to show them tips and tricks that will make their journey into programming a little easier. Often, this involves showing them how to build simple functions.
+
+In this case, I thought I could build a simple function to compute Simpson's Diversity index in a simple `group_by()` — `summarise()` workflow. 
+
+Boy, was I wrong.
+
+The answer turns out to be tricky, but not *that* tricky.
+
+## Building the function
+
+### Reading the data
+
+The input data were saved as an `.rds` file, so we will attach the `tidyverse`, then read in the data:
+
+```{r}
+library(tidyverse)
+dat <- read_rds("/Users/davidschoeman/Downloads/data.rds") # Of course, if your data were in a .csv, you'd read_csv()
+head(dat)
+```
+
+### A workflow for computing Simpson's Index
+
+The idea is to build a function to compute Simpson's index using `Specific_Name` to identify the species involved, and `Observations` to represent their abundances.
+
+Before we explore this as a workflow, we need to know the formula for the Simpson Diversity Index, D:
+
+$$
+D = \frac{\Sigma_{i}n_{i}(n_{i}-1)}{N(N-1)},
+$$
+
+where $n_{i}$ is the abundance of species $i$ and $N$ is the sum of all species abundances ($\Sigma_{i}n_{i}$).
+
+Let's say that we wanted to compute this index for the `SD` `Campus`. The workflow would look something like this:
+
+```{r}
+d <- dat %>% 
+  filter(Campus == "SD") # Filter for SD 
+
+numerator <- d %>% # First compute the numerator
+  group_by(Scientific_Name) %>% # To be sure that there aren't duplicate lines per species
+  summarise(n = sum(Observations, na.rm = TRUE)) %>% 
+  mutate(n_min_1 = n - 1, # Add a variable for n-1
+         prod = n * n_min_1) %>%  # The product of n and n-1
+  summarise(sum(prod, na.rm = TRUE)) %>%  # The numerator is the sum of the product of n and n-1
+  deframe() # Make the output a number rather than a tibble
+
+denominator <- d %>% # Next, the denominator
+  summarise(n = sum(Observations, na.rm = TRUE)) %>% 
+      mutate(n_min_1 = n - 1,
+             prod = n * n_min_1) %>% # The demoniator is the sum of the total number of observations and the total minus one
+  pull(prod) # Extract just the product as a number
+
+S <- numerator/denominator # Do the calculation
+
+print(S) # OUtput the result
+```
+
+I was hoping to turn this into a function deployed with `summarise()`, but found that it isn't straightforward to "feed" grouped data into a function this complex.
+
+So, instead, we need to build a function that does the grouping as well as the summarising.
+
+### Building the actual function
+
+The first issue is that if we want to build a function that is going to group and summarise data, we need to allow that function to have arguments that are names of variables.
+
+Achieving this is somewhat trickier than it sounds because if you call variable name, `R` will invariably error out because that variable exists within a `tibble`/`data.frame` rather than being present in the environment.
+
+So...we need to *pretend* that the variable name is *not* an object. We do this with a technique called "data masking", which essentially means that you hide the variable name inside two pairs of braces: `{{ var }}`, where `var` is the name of the variable.
+
+Another issue is that *if* you want your function to be flexible *as well as* generic, it has to be able to take any number of arguments to specify grouping variables. This is done within the function call, by specifying open-ended arguments using the ellipsis: `...`
+
+Note that to make a function, all we do is throw braces — `{}` — around a workflow, give the function a name and specify its arguments:
+
+```{r}
+  get_simpson <- function(.data, spp, abund, ...) {
+    # .data: the short-hand for the data emerging from a tidyverse pipe (so no need to specify this argument when using the function... the dot means it is "hidden")
+    # spp: an argument for the variable containing the species identifiers
+    # abund: an argument for the name of the variable containing abundance by species
+    # ...: arguments for the names of the variables you want to group by
+    
+    numerator <- .data %>% # .data is the data passed by the pipe
+      group_by(..., {{ spp }}) %>% # Group by named grouping variables, then by species identifier
+      summarise(n = sum({{ abund }}, na.rm = TRUE)) %>% # {{ abund }} is the variable containing abundances
+        # Note that this step accounts for the possibility of repeat rows for a species for any combination of grouping variables
+        mutate(n_min_1 = n - 1, # Add a variable for n-1
+             prod = n * n_min_1) %>% # Add a variable for the product of n and n-1
+      group_by(...) %>% # Group the result by the grouping variables
+      summarise(numerator = sum(prod, na.rm = TRUE)) # Compute the sum of the products per group
+   
+    denominator <- .data %>%
+      group_by(...) %>% # We want the denominator only for groups, NOT for the species
+      summarise(n = sum({{ abund }}, na.rm = TRUE)) %>% # The overall sum per group
+      mutate(n_min_1 = n - 1, # n-1
+             denominator = n * n_min_1) %>% # n * n-1
+    select(-n, -n_min_1) # Remove unused rows
+    
+    out <- left_join(numerator, denominator) %>% # Combine the tibbles into a single tibble; R will use the grouping variables to ensure that values are in the correct rows
+      mutate(D = numerator/denominator) %>% # Do the calculation per row/group
+      select(-numerator, -denominator) # Remove unwanted variables
+    
+  return(out) # Return the answer
+  } 
+```
+
+Let's give it a whirl, knowing that the Simpson Diversity index for `SD` is 0.18:
+
+```{r}
+dat %>% 
+  get_simpson(Scientific_Name, Observations, Campus) # Spp ID, abundance, grouping variable
+```
+
+Works! Or, at least, it gives the same answer as I got before.
+
+A more complex deployment, remembering that we can group by more than just campus:
+
+```{r}
+dat %>% 
+  get_simpson(Scientific_Name, Observations, Campus, Year) # Grouping by campus and year
+```
+
+This seems to give rational outputs, although I would check before deploying in a serious context.
+
+## Conclusion
+
+This short blog is not about a diversity index, but rather about how easy it is to write and deploy fairly complex functions, allowing us to use variable names as unquoted arguments, and even to have an unlimited number of arguments in other contexts. Play around with these ideas...they have proven very helpful in my coding journey. I hope that they are equally useful to you.

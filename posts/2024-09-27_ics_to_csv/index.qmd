@@ -1,0 +1,136 @@
+---
+title: "Converting a calendar export from .ics to .csv"
+description: "My very first blog. Ever."
+author:
+  - name: David Schoeman
+date: 2024-09-27
+categories: [R programming] # self-defined categories
+image: cal.png
+draft: false # setting this to `true` will prevent your post from appearing on your listing page until you're ready!
+---
+
+OK, so this is my first attempt at a blog. It came about because I had a discussion with my Dean about how much time I was spending on teaching vs research vs engagement. Being a data nerd, I record my activities in my Mac Calendar app as a matter of course, so I have a record of what I have been doing. But getting data out of a Calendar app and into a format you can analyse is more difficult. So I decided to write a script to get this done. And because most other options for doing this either cost money, or ask you to trust some or other skeevy website, I thought I'd share my code. Of course, sharing code also means that others can help me improve it, so let me know where I went wrong.
+
+First things first, the packages we'll need:
+
+```{r}
+library(tidyverse) # For data munging
+library(parallel) # To count the cores on my machine, amongst other things
+library(furrr) # To allow me to deploy a function in parallel
+```
+
+Next, we get the data — after I exported my calendar to a `.ics` file.
+
+```{r}
+dat <- read_lines("/Users/davidschoeman/Dropbox/Documents/USC_Admin/Calendar_export_27092024.ics") %>% # It's a text file so read it as lines of text
+    tibble() %>% # Make the result into a tibble
+    rename(Info = 1) # It'll have only one column; I'll call it Info
+```
+
+Next, I figure out which rows indicate the start and end of each events, and I clump them together into a tibble:
+
+```{r}
+events <- tibble(Starts = dat %>%
+  								 	pull(Info) %>% 
+  								 	str_which("BEGIN:VEVENT"), # You might need to change the event-start identifier
+  								 Ends = dat %>%
+  								 	pull(Info) %>% 
+  								 	str_which("END:VEVENT")) # You might need to change the event-end identifier
+```
+
+Next, we need a function to pull out the required details from each event:
+
+```{r}
+get_event_deets <- function(s, e) {
+    	d <- dat[s:e,] # A row from dat, based on one row from events
+    	get_bit <- function(b) { # A function to look for a keyword and return the data
+    		d %>% 
+    			filter(str_detect(Info, b)) %>% # Find the row in question 
+    			deframe() %>% # Make it a vector
+    			str_remove(b) %>% # Remove the keyword
+    			str_sub(2, -1) # Remove just the first character, which is either ; or :, leaving just the info to extract
+    		}
+    	return(list(Start = get_bit("DTSTART") %>% 
+    							str_remove("TZID=") %>% # Remove the time identifier, if present
+    							str_split(":") %>% # Split on the colon
+    							unlist() %>% # Make it a vector
+    							nth(2) %>% # Select second element
+    							strptime(., "%Y%m%dT%H%M%OS", tz = "australia/brisbane"), # Make it time
+    						End = get_bit("DTEND") %>% 
+    							str_remove("TZID=") %>% 
+    							str_split(":") %>% 
+    							unlist() %>% 
+    							nth(2) %>% 
+    							strptime(., "%Y%m%dT%H%M%OS", tz = "australia/brisbane"), 
+    						Event = get_bit("SUMMARY")))
+    	}
+```
+
+Finally, we deploy the function against the `events` tibble...in parallel, because it's quite large. If you prefer to run on a single core, hash out the lines starting with `plan()`, and delete `future_` from the line with `future_pmap`:
+
+```{r}
+plan(multisession, workers = detectCores()-4) # Using all but four of my cores
+    csv_cal <- future_pmap(events, # For each row of events
+                           ~get_event_deets(..1, ..2)) %>%  # Get the details
+      bind_rows() %>% # Bind output lists into a tibble
+      arrange(Start) # Place in sequential order
+    plan(sequential)
+```
+
+Finally, we save the output:
+
+```{r}
+write_csv(csv_cal, "/Users/davidschoeman/Dropbox/Documents/USC_Admin/Calendar.csv") # Write the output to a file
+```
+
+Let's have a peek at what that tibble looks like (bearing in mind that this is made up data):
+
+```{r}
+csv_cal
+```
+
+OK, so now that we have the data, we can search for keywords and see how much time we've spent on those activities. We'll first filter for a specific time period and make sure that our timezone is correctly set (this is important if you pull in the `.csv` we saved earlier):
+
+```{r}
+strt_date <- "2024-01-01" # A start date
+end_date <- "2024-12-31" # An end date
+
+dat <- csv_cal %>% 
+		filter(Start >= strt_date & Start <= end_date) %>% # Filter by period of interest
+		mutate(Start = with_tz(Start, "australia/brisbane"), # Ensure that my timezone is set correctly
+					 End = with_tz(End, "australia/brisbane"), # And again
+					 Duration = (End - Start) %>% 
+					 	as.numeric()/60/60) # Compute the duration of each event in hours
+```
+
+Next, we group by event name, sum the time committed and remove any "activities" that might be placeholders rather than actual time commitments:
+
+```{r}
+time_spent <- dat %>% 
+		group_by(Event) %>% 
+		summarise(Time = sum(Duration)) %>% # Compute the summed duration committed to each event
+		filter(str_detect(Event, "WFH|Playing Wordle", negate = TRUE)) # Remove any specific events that are not for logging time
+```
+
+Finally, we write a short function to extract all lines containing a specific keyword, then use that function to look around:
+
+```{r}
+get_time <- function(a) {
+			ts <- time_spent %>% 
+				filter(str_detect(Event, a))
+			return(list(Time_table = data.frame(ts), # Output all rows containing the keyword, in case you need to check
+						 Total = ts %>% 
+										pull(Time) %>% 
+										sum())) # Also report total time spent on events containing that keyword
+			}
+```
+
+OK, so let's see how much time I have spent on my year-2 stats course so far this year:
+
+```{r}
+get_time("ANM203")$Total
+```
+
+Sooo...240 hours...and we still have four weeks of semester to go, and a major assignment to mark...oh well...
+
+OK, in the end, you can see that it's not particularly difficult, but I hope this saves you some time if you ever want to analyse calendar data yourself.
