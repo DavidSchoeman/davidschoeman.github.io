@@ -22,7 +22,7 @@ library(furrr) # To allow me to deploy a function in parallel
 Next, we get the data — after I exported my calendar to a `.ics` file.
 
 ```{r}
-dat <- read_lines("/Users/davidschoeman/Dropbox/Documents/USC_Admin/Calendar_export_27092024.ics") %>% # It's a text file so read it as lines of text
+dat <- read_lines("Calendar.ics") %>% # It's a text file so read it as lines of text
     tibble() %>% # Make the result into a tibble
     rename(Info = 1) # It'll have only one column; I'll call it Info
 ```
@@ -80,7 +80,7 @@ plan(multisession, workers = detectCores()-4) # Using all but four of my cores
 Finally, we save the output:
 
 ```{r}
-write_csv(csv_cal, "/Users/davidschoeman/Dropbox/Documents/USC_Admin/Calendar.csv") # Write the output to a file
+write_csv(csv_cal, "Calendar.csv") # Write the output to a file
 ```
 
 Let's have a peek at what that tibble looks like (bearing in mind that this is made up data):
@@ -93,7 +93,7 @@ OK, so now that we have the data, we can search for keywords and see how much ti
 
 ```{r}
 strt_date <- "2024-01-01" # A start date
-end_date <- "2024-12-31" # An end date
+end_date <- Sys.Date() # An end date...today's date, just to keep it simple
 
 dat <- csv_cal %>% 
 		filter(Start >= strt_date & Start <= end_date) %>% # Filter by period of interest
